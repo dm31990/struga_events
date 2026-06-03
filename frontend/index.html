@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struga Events — Rental Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+            <span class="logo-symbol">◆</span>
+            <span class="logo-text">Struga Events</span>
+        </a>
+        <div class="nav-links" id="navLinks">
+            <a href="#catalog-section" class="nav-link">Catalog</a>
+            <a href="#about-section" class="nav-link">About</a>
+            <a href="dashboard.html" class="nav-link" id="dashboardLink" style="display:none">My Bookings</a>
+            <a href="admin.html" class="nav-link" id="adminLink" style="display:none">Admin Panel</a>
+            <button class="btn-ghost" id="logoutBtn" style="display:none" onclick="logout()">Sign Out</button>
+            <button class="btn-primary" id="loginBtn" onclick="openModal('loginModal')">Sign In</button>
+            <button class="btn-ghost" id="registerBtn" onclick="openModal('registerModal')">Register</button>
+        </div>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()">☰</button>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <p class="hero-eyebrow">Struga, North Macedonia</p>
+        <h1 class="hero-title">Events Made<br><em>Effortless</em></h1>
+        <p class="hero-subtitle">Browse wedding tents, tables, chairs, decorations, and lighting. Check availability, request reservations online, and let our team handle the rest — from Lake Ohrid shores to hillside celebrations.</p>
+        <div class="hero-actions">
+            <a href="#catalog-section" class="btn-primary btn-large">Browse Equipment</a>
+            <a href="#about-section" class="btn-outline btn-large">How It Works</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat"><span class="stat-num" id="statItems">—</span><span class="stat-label">Rental Items</span></div>
+            <div class="stat-divider"></div>
+            <div class="stat"><span class="stat-num" id="statReservations">—</span><span class="stat-label">Events Served</span></div>
+            <div class="stat-divider"></div>
+            <div class="stat"><span class="stat-num" id="statCustomers">—</span><span class="stat-label">Happy Clients</span></div>
+        </div>
+    </div>
+    <div class="hero-scroll">
+        <span>Scroll to catalog</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<section class="search-section" id="catalog-section">
+    <div class="section-inner">
+        <div class="section-header">
+            <p class="section-eyebrow">Equipment Catalog</p>
+            <h2 class="section-title">Find Rental Items</h2>
+            <p class="section-subtitle">Search by name, category, or maximum daily price. Approved bookings are reflected in real-time availability.</p>
+        </div>
+        <div class="search-card">
+            <form id="searchForm" class="search-form">
+                <div class="search-row">
+                    <div class="search-field">
+                        <label>Item Name</label>
+                        <input type="text" name="name" placeholder="e.g. Wedding Tent" autocomplete="off">
+                    </div>
+                    <div class="search-field">
+                        <label>Category</label>
+                        <select name="category_id" id="categoryFilter">
+                            <option value="">All categories</option>
+                        </select>
+                    </div>
+                    <div class="search-field">
+                        <label>Max Daily Price (€)</label>
+                        <input type="number" name="max_price" min="0" step="1" placeholder="e.g. 100">
+                    </div>
+                    <button type="submit" class="btn-primary search-btn">
+                        <span class="search-icon">⌕</span> Search
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="search-card" id="cartSection" style="display:none; margin-bottom:2rem;">
+            <h3 class="card-section-title">Reservation Cart</h3>
+            <p class="card-section-sub">Add items from the catalog, then submit one booking request (document §6.3 — reservation cart).</p>
+            <div id="cartItems" class="submissions-list"></div>
+            <p id="cartTotal" style="margin:1rem 0;font-weight:600;"></p>
+            <button type="button" class="btn-primary" onclick="openCheckoutModal()">Proceed to Checkout</button>
+            <button type="button" class="btn-ghost" onclick="clearCart()" style="margin-left:0.5rem">Clear Cart</button>
+        </div>
+
+        <div id="searchResults" class="results-grid"></div>
+        <div id="searchMsg" class="search-msg"></div>
+    </div>
+</section>
+
+<section class="about-section" id="about-section">
+    <div class="section-inner about-grid">
+        <div class="about-text">
+            <p class="section-eyebrow">About the System</p>
+            <h2 class="section-title">Struga Events Rental</h2>
+            <p class="about-body">A centralized management system for event rental businesses in Struga — reducing manual work, preventing double bookings, and simplifying inventory and scheduling.</p>
+            <div class="about-features">
+                <div class="feature">
+                    <span class="feature-icon">◎</span>
+                    <div>
+                        <strong>Online Reservations</strong>
+                        <p>Customers browse equipment, check availability, and submit booking requests.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">◎</span>
+                    <div>
+                        <strong>Admin Dashboard</strong>
+                        <p>Approve or cancel bookings, manage inventory, generate invoices, and view the event calendar.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">◎</span>
+                    <div>
+                        <strong>Conflict Prevention</strong>
+                        <p>Stock is reserved across overlapping dates for pending and approved bookings.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="about-image">
+            <div class="about-image-inner">
+                <div class="about-quote">
+                    <p>From lakeside weddings to corporate gatherings — every detail, every tent, every chair.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="logo-symbol">◆</span>
+            <span class="logo-text">Struga Events</span>
+            <p>Events Rental Management System</p>
+        </div>
+        <div class="footer-links">
+            <a href="#catalog-section">Catalog</a>
+            <a href="dashboard.html">My Bookings</a>
+            <a href="#about-section">About</a>
+        </div>
+        <p class="footer-copy">© 2026 Struga Events Rental — SEEU Project · Drilon Merko</p>
+    </div>
+</footer>
+
+<div class="modal-overlay" id="loginModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+        <h2 class="modal-title">Sign In</h2>
+        <p class="modal-subtitle">Access your Struga Events account</p>
+        <form id="loginForm" class="modal-form">
+            <div class="form-field">
+                <label>Email Address</label>
+                <input type="email" name="email" required placeholder="your@email.com">
+            </div>
+            <div class="form-field">
+                <label>Password</label>
+                <input type="password" name="password" required placeholder="••••••••">
+            </div>
+            <div id="loginError" class="form-error"></div>
+            <button type="submit" class="btn-primary btn-full">Sign In</button>
+        </form>
+        <p class="modal-switch">Don't have an account? <a href="#" onclick="switchModal('loginModal','registerModal')">Register here</a></p>
+    </div>
+</div>
+
+<div class="modal-overlay" id="registerModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
+        <h2 class="modal-title">Create Account</h2>
+        <p class="modal-subtitle">Register as a customer to request rentals</p>
+        <form id="registerForm" class="modal-form">
+            <div class="form-row">
+                <div class="form-field">
+                    <label>First Name</label>
+                    <input type="text" name="first_name" required>
+                </div>
+                <div class="form-field">
+                    <label>Last Name</label>
+                    <input type="text" name="last_name" required>
+                </div>
+            </div>
+            <div class="form-field">
+                <label>Email</label>
+                <input type="email" name="email" required>
+            </div>
+            <div class="form-field">
+                <label>Phone</label>
+                <input type="text" name="phone" placeholder="+389 70 000 000">
+            </div>
+            <div class="form-field">
+                <label>Password</label>
+                <input type="password" name="password" required minlength="8">
+            </div>
+            <div id="registerError" class="form-error"></div>
+            <div id="registerSuccess" class="form-success"></div>
+            <button type="submit" class="btn-primary btn-full">Create Account</button>
+        </form>
+        <p class="modal-switch">Already registered? <a href="#" onclick="switchModal('registerModal','loginModal')">Sign in</a></p>
+    </div>
+</div>
+
+<div class="modal-overlay" id="itemModal">
+    <div class="modal modal-large">
+        <button class="modal-close" onclick="closeModal('itemModal')">✕</button>
+        <div id="itemModalContent"></div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="bookModal">
+    <div class="modal modal-large">
+        <button class="modal-close" onclick="closeModal('bookModal')">✕</button>
+        <h2 class="modal-title">Submit Reservation Request</h2>
+        <p class="modal-subtitle" id="bookItemLabel">Complete event details for all items in your cart.</p>
+        <form id="bookForm" class="modal-form">
+            <div class="form-field">
+                <label>Event Name</label>
+                <input type="text" name="event_name" required placeholder="e.g. Wedding — Petrovski">
+            </div>
+            <div class="form-field">
+                <label>Delivery Address</label>
+                <input type="text" name="delivery_address" required placeholder="Venue address in Struga region...">
+            </div>
+            <div class="form-row">
+                <div class="form-field">
+                    <label>Start Date</label>
+                    <input type="date" name="event_date" id="bookStart" required>
+                </div>
+                <div class="form-field">
+                    <label>End Date</label>
+                    <input type="date" name="end_date" id="bookEnd" required>
+                </div>
+            </div>
+            <div class="form-field">
+                <label>Notes (optional)</label>
+                <textarea name="notes" rows="3"></textarea>
+            </div>
+            <div id="checkoutCartPreview" class="grave-modal-bio"></div>
+            <div id="bookError" class="form-error"></div>
+            <button type="submit" class="btn-primary btn-full">Submit Request</button>
+        </form>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

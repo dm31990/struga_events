@@ -1,0 +1,22 @@
+STRUGA EVENTS — UDHËZIM INSTALIMI
+==================================
+
+1. Instalo XAMPP nga https://www.apachefriends.org/
+
+2. Kopjo këtë folder të plotë në:
+   C:\xampp\htdocs\StrugaEventsRental
+
+3. Nis Apache dhe MySQL nga XAMPP Control Panel
+
+4. Hap phpMyAdmin → Import → zgjidh:
+   C:\xampp\htdocs\StrugaEventsRental\sql\schema.sql
+
+5. (Opsionale) Në backend/db.php vendos fjalëkalimin e MySQL
+
+6. Hap shfletuesin:
+   http://localhost/StrugaEventsRental/frontend/index.html
+
+7. Hyr si admin:
+   Email: admin@strugaevents.mk
+   Password: password
+

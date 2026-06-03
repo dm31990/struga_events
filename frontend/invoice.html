@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice — Struga Events</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body { max-width: 800px; margin: 2rem auto; padding: 2rem; background: #fff; }
+        .invoice-header { border-bottom: 2px solid #2e6b8a; padding-bottom: 1rem; margin-bottom: 1.5rem; }
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        th, td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; }
+        th { background: #f5f5f5; }
+        @media print { .no-print { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="no-print" style="margin-bottom:1rem">
+        <button class="btn-primary" onclick="window.print()">Print / Save as PDF</button>
+        <a href="dashboard.html" class="btn-ghost" style="margin-left:0.5rem">Back</a>
+    </div>
+    <div id="invoiceContent"><p>Loading invoice...</p></div>
+    <script>
+        const API = '../backend';
+        const params = new URLSearchParams(location.search);
+        const rid = params.get('reservation_id');
+        if (!rid) document.getElementById('invoiceContent').innerHTML = '<p>Missing reservation_id</p>';
+        else fetch(`${API}/get_invoice.php?reservation_id=${rid}`, { credentials: 'include' })
+            .then(r => r.json())
+            .then(inv => {
+                if (inv.error) { document.getElementById('invoiceContent').innerHTML = '<p>' + inv.error + '</p>'; return; }
+                const rows = (inv.line_items || []).map(l =>
+                    `<tr><td>${l.description}</td><td>${l.quantity}</td><td>€${parseFloat(l.unit_price).toFixed(2)}</td><td>€${parseFloat(l.subtotal).toFixed(2)}</td></tr>`
+                ).join('');
+                document.getElementById('invoiceContent').innerHTML = `
+                    <div class="invoice-header">
+                        <h1>Struga Events Rental</h1>
+                        <p><strong>${inv.invoice_number}</strong> · Issued ${inv.issue_date} · Due ${inv.due_date || '—'}</p>
+                    </div>
+                    <p><strong>Bill to:</strong> ${inv.customer_name}<br>${inv.email} · ${inv.phone || ''}</p>
+                    <p><strong>Event:</strong> ${inv.event_name}<br>${inv.event_date} — ${inv.end_date}<br>${inv.delivery_address || ''}</p>
+                    <table><thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Subtotal</th></tr></thead><tbody>${rows}</tbody></table>
+                    <p>Subtotal: €${parseFloat(inv.total_amount).toFixed(2)}<br>
+                    VAT (${inv.tax_rate}%): €${parseFloat(inv.tax_amount).toFixed(2)}<br>
+                    Deposit: €${parseFloat(inv.deposit_amount || 0).toFixed(2)}<br>
+                    <strong>Total: €${parseFloat(inv.total_with_tax).toFixed(2)}</strong><br>
+                    Payment status: ${inv.payment_status}</p>`;
+            });
+    </script>
+</body>
+</html>

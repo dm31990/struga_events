@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel — Struga Events</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+</head>
+<body class="dashboard-page admin-page">
+
+<nav class="navbar admin-navbar" id="navbar">
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+            <span class="logo-symbol">◆</span>
+            <span class="logo-text">Struga Events</span>
+            <span class="admin-badge">Admin</span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">View Site</a>
+            <button class="btn-ghost" onclick="logout()">Sign Out</button>
+        </div>
+    </div>
+</nav>
+
+<div class="dashboard-layout">
+    <aside class="sidebar admin-sidebar">
+        <div class="sidebar-profile">
+            <div class="avatar admin-avatar">A</div>
+            <p class="sidebar-name" id="adminName">Administrator</p>
+            <p class="sidebar-role">Staff</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="sidebar-link active" onclick="showAdminTab('dashboardTab', this)">
+                <span class="sidebar-icon">⊞</span> Dashboard
+            </a>
+            <a href="#" class="sidebar-link" onclick="showAdminTab('pendingTab', this)">
+                <span class="sidebar-icon">◷</span> Pending Bookings
+                <span class="badge" id="pendingBadge" style="display:none"></span>
+            </a>
+            <a href="#" class="sidebar-link" onclick="showAdminTab('customersTab', this)">
+                <span class="sidebar-icon">◎</span> Customers
+            </a>
+            <a href="#" class="sidebar-link" onclick="showAdminTab('calendarTab', this)">
+                <span class="sidebar-icon">▦</span> Event Calendar
+            </a>
+            <a href="#" class="sidebar-link" onclick="showAdminTab('reportsTab', this)" id="reportsNav">
+                <span class="sidebar-icon">▤</span> Reports
+            </a>
+            <a href="#" class="sidebar-link" onclick="showAdminTab('usersTab', this)" id="usersNav">
+                <span class="sidebar-icon">◎</span> Users
+            </a>
+            <a href="#" class="sidebar-link" onclick="showAdminTab('inventoryTab', this)" id="inventoryNav">
+                <span class="sidebar-icon">▣</span> Inventory
+            </a>
+        </nav>
+    </aside>
+
+    <main class="dashboard-main" style="max-width:1100px">
+
+        <div id="dashboardTab" class="tab-content active">
+            <div class="dash-header">
+                <h1 class="dash-title">Management Dashboard</h1>
+                <p class="dash-subtitle">Reservations, revenue, and inventory overview.</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-card-icon">◷</span>
+                    <div>
+                        <p class="stat-card-num" id="pendingCount">—</p>
+                        <p class="stat-card-label">Pending Bookings</p>
+                    </div>
+                </div>
+                <div class="stat-card stat-card-approved">
+                    <span class="stat-card-icon">✓</span>
+                    <div>
+                        <p class="stat-card-num" id="approvedCount">—</p>
+                        <p class="stat-card-label">Approved Events</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-card-icon">€</span>
+                    <div>
+                        <p class="stat-card-num" id="revenueCount">—</p>
+                        <p class="stat-card-label">Revenue (invoiced)</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-card-icon">◎</span>
+                    <div>
+                        <p class="stat-card-num" id="customersCount">—</p>
+                        <p class="stat-card-label">Customers</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-card-icon">!</span>
+                    <div>
+                        <p class="stat-card-num" id="lowStockCount">—</p>
+                        <p class="stat-card-label">Low Stock Items</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="pendingTab" class="tab-content">
+            <div class="dash-header">
+                <h1 class="dash-title">Pending Reservations</h1>
+                <p class="dash-subtitle">Approve or reject customer booking requests.</p>
+            </div>
+            <div id="pendingList" class="admin-list">
+                <div class="loading-state">Loading...</div>
+            </div>
+        </div>
+
+        <div id="customersTab" class="tab-content">
+            <div class="dash-header">
+                <h1 class="dash-title">Customer Management</h1>
+            </div>
+            <div id="customersList" class="admin-list">
+                <div class="loading-state">Loading...</div>
+            </div>
+        </div>
+
+        <div id="calendarTab" class="tab-content">
+            <div class="dash-header">
+                <h1 class="dash-title">Event Calendar</h1>
+                <p class="dash-subtitle">FullCalendar.js — confirmed bookings and deliveries (document §5.2, §6.3).</p>
+            </div>
+            <div class="dash-card">
+                <div id="fullCalendar" style="min-height:500px;"></div>
+            </div>
+        </div>
+
+        <div id="reportsTab" class="tab-content">
+            <div class="dash-header">
+                <h1 class="dash-title">Reports</h1>
+                <p class="dash-subtitle">Revenue and reservation statistics (T20).</p>
+            </div>
+            <div class="dash-card">
+                <div class="form-row">
+                    <div class="form-field"><label>From</label><input type="date" id="reportFrom"></div>
+                    <div class="form-field"><label>To</label><input type="date" id="reportTo"></div>
+                    <button class="btn-primary" onclick="loadReports()" style="height:48px">Generate Report</button>
+                </div>
+                <pre id="reportOutput" style="margin-top:1rem;white-space:pre-wrap;font-size:0.85rem;"></pre>
+            </div>
+        </div>
+
+        <div id="usersTab" class="tab-content">
+            <div class="dash-header">
+                <h1 class="dash-title">User Management</h1>
+                <p class="dash-subtitle">Employee accounts and roles (admin).</p>
+            </div>
+            <div id="usersList" class="admin-list"><div class="loading-state">Loading...</div></div>
+        </div>
+
+        <div id="inventoryTab" class="tab-content">
+            <div class="dash-header">
+                <h1 class="dash-title">Inventory Tracking</h1>
+                <p class="dash-subtitle">Update quantities, prices, and photos (employees &amp; admins).</p>
+            </div>
+            <div id="inventoryList" class="admin-list">
+                <div class="loading-state">Loading...</div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="app.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

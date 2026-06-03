@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings — Struga Events</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dashboard-page">
+
+<nav class="navbar" id="navbar">
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+            <span class="logo-symbol">◆</span>
+            <span class="logo-text">Struga Events</span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Catalog</a>
+            <span class="nav-user" id="navUser"></span>
+            <button class="btn-ghost" onclick="logout()">Sign Out</button>
+        </div>
+    </div>
+</nav>
+
+<div class="dashboard-layout">
+    <aside class="sidebar">
+        <div class="sidebar-profile">
+            <div class="avatar" id="sidebarAvatar">?</div>
+            <p class="sidebar-name" id="sidebarName">Loading...</p>
+            <p class="sidebar-role">Customer</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="sidebar-link active" onclick="showTab('reservationsTab', this)">
+                <span class="sidebar-icon">◫</span> My Reservations
+            </a>
+            <a href="#" class="sidebar-link" onclick="showTab('calendarTab', this)">
+                <span class="sidebar-icon">▦</span> Event Calendar
+            </a>
+            <a href="#" class="sidebar-link" onclick="showTab('notificationsTab', this)">
+                <span class="sidebar-icon">◉</span> Notifications
+                <span class="badge" id="notifBadge" style="display:none"></span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="dashboard-main">
+        <div id="reservationsTab" class="tab-content active">
+            <div class="dash-header">
+                <h1 class="dash-title">My Reservations</h1>
+                <p class="dash-subtitle">Track pending, approved, and completed event bookings.</p>
+            </div>
+            <div class="dash-card">
+                <a href="index.html#catalog-section" class="btn-primary">+ Browse Equipment</a>
+            </div>
+            <div id="reservationsList" class="submissions-list">
+                <div class="loading-state">Loading reservations...</div>
+            </div>
+        </div>
+
+        <div id="calendarTab" class="tab-content">
+            <div class="dash-header">
+                <h1 class="dash-title">Event Calendar</h1>
+                <p class="dash-subtitle">Your approved events on the schedule.</p>
+            </div>
+            <div id="calendarList" class="submissions-list">
+                <div class="loading-state">Loading calendar...</div>
+            </div>
+        </div>
+
+        <div id="notificationsTab" class="tab-content">
+            <div class="dash-header">
+                <h1 class="dash-title">Notifications</h1>
+            </div>
+            <div id="notificationsList" class="notifications-list">
+                <div class="loading-state">Loading...</div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="app.js"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>
