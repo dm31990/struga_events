@@ -91,3 +91,6 @@ http://localhost/StrugaEventsRental/frontend/index.html
 ---
 
 © 2026 Struga Events Rental — SEEU Tetovo
+## Pull Request Test
+
+Ky ndryshim u krijua për testimin e Pull Request.
